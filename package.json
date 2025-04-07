@@ -1,0 +1,22 @@
+{
+  "name": "mern_auth",
+  "version": "1.0.0",
+  "description": "I've been tasked by my mentor to research more into auth. I have started by doing some basic research, writing notes down in my good old fashioned notepad.\r I will then build a small basic auth application using a tutorial or two. At time of writing I do not know the exact path of the tutorial although have a good idea.",
+  "main": "backend/server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.13.2",
+    "resend": "^4.2.0"
+  }
+}
