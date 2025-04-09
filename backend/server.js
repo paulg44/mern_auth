@@ -7,6 +7,7 @@ import authRoutes from "./routes/auth-route.js";
 dotenv.config();
 
 const app = express();
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Hello World!!");

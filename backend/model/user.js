@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    // This is important on signup to check that the email is unique
     unique: true,
   },
   password: {
