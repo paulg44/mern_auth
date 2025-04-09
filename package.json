@@ -5,6 +5,7 @@
   "main": "backend/server.js",
   "type": "module",
   "scripts": {
+    "dev": "nodemon backend/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -18,5 +19,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.2",
     "resend": "^4.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
   }
 }
