@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { generateVerificationToken } from "../utils/generateVerificationToken.js";
 import { generateJWTToken } from "../utils/generateJWTToken.js";
 import { sendVerificationEmail } from "../resend/email.js";
+import { sendWelcomeEmail } from "../resend/email.js";
 
 export const signup = async (req, res) => {
   const { name, email, password } = req.body;
@@ -48,9 +49,43 @@ export const signup = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
 export const login = (req, res) => {
   res.send("Login route");
 };
+
 export const logout = (req, res) => {
   res.send("Logout route");
+};
+
+export const verifyEmail = async (req, res) => {
+  // Require the verification code
+  const { code } = req.body;
+  try {
+    // Find the user that corresponds to the verification token
+    const user = await User.findOne({
+      verificationToken: code,
+      verificationTokenExpiresAt: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or expired verification code",
+      });
+    }
+    user.isVerified = true;
+    user.verificationToken = undefined;
+    user.verificationTokenExpiresAt = undefined;
+    await user.save();
+
+    await sendWelcomeEmail(user.email, user.name);
+
+    res
+      .status(200)
+      .json({ success: true, message: "Email verified successfully" });
+  } catch (error) {
+    console.error("error verifying email", error);
+    res.status(400).json({ success: false, message: error.message });
+  }
 };
