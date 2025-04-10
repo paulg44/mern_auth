@@ -1,4 +1,5 @@
 import { resend } from "./config.js";
+import { verificationTokenEmailTemplate } from "./email-templates.js";
 
 export const sendVerificationEmail = async (email, verificationToken) => {
   try {
@@ -6,7 +7,10 @@ export const sendVerificationEmail = async (email, verificationToken) => {
       from: "Acme <onboarding@resend.dev>",
       to: [email],
       subject: "Verify Your Email Address Now",
-      html: `Verify your email address with this token: ${verificationToken}`,
+      html: verificationTokenEmailTemplate.replace(
+        "{verificationToken}",
+        verificationToken
+      ),
     });
   } catch (error) {
     console.error("Error sending verification email", error);
