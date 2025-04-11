@@ -29,5 +29,33 @@ export const sendWelcomeEmail = async (email, name) => {
       subject: "Welcome to our company",
       html: WELCOME_EMAIL_TEMPLATE.replace("{name}", name),
     });
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error sending welcome email", error);
+  }
+};
+
+export const sendPasswordResetEmail = async (email, resetURL) => {
+  try {
+    const { data, error } = await resend.emails.send({
+      from: "Acme <onboarding@resend.dev>",
+      to: [email],
+      subject: "Reset Your Password",
+      html: `Click <a href="${resetURL}">here</a> to reset your password`,
+    });
+  } catch (error) {
+    console.error("Error sending reset password email", error);
+  }
+};
+
+export const sendResetSuccessEmail = async (email) => {
+  try {
+    const { data, error } = await resend.emails.send({
+      from: "Acme <onboarding@resend.dev>",
+      to: [email],
+      subject: "Password Reset Was Successful",
+      html: "Your password was reset successfully",
+    });
+  } catch (error) {
+    console.error("Error sending password reset successful email", error);
+  }
 };
