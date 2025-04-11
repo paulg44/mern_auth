@@ -50,8 +50,39 @@ export const signup = async (req, res) => {
   }
 };
 
-export const login = (req, res) => {
-  res.send("Login route");
+export const login = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid credentials" });
+    }
+
+    // Here we are checking to see if the user password input is the same as the hashed password of the user
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid credentials" });
+    }
+
+    // Checks if email is verified (true)
+    const isVerified = user.isVerified;
+    if (!isVerified) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Email not verified" });
+    }
+
+    generateJWTToken(res, user._id);
+
+    res.status(200).json({ success: true, message: "Login successful" });
+  } catch (error) {
+    console.error("error logging in", error);
+    res.status(400).json({ success: false, message: error.message });
+  }
 };
 
 export const logout = (req, res) => {
@@ -74,6 +105,8 @@ export const verifyEmail = async (req, res) => {
         message: "Invalid or expired verification code",
       });
     }
+
+    // Sets the user as a verified user in the database and removes the verification tokens as these will have been used
     user.isVerified = true;
     user.verificationToken = undefined;
     user.verificationTokenExpiresAt = undefined;
