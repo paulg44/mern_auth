@@ -195,3 +195,20 @@ export const resetPassword = async (req, res) => {
     res.status(400).json({ success: true, message: error.message });
   }
 };
+
+export const checkAuth = async (req, res) => {
+  try {
+    // Don't have access to the email in this function so using findById instead of findOne
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(400).json({ success: true, message: "User not found" });
+    }
+
+    res
+      .status(200)
+      .json({ success: true, user: { ...user._doc, password: undefined } });
+  } catch (error) {
+    console.error("error checking auth", error);
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
