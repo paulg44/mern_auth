@@ -4,10 +4,12 @@ import dotenv from "dotenv";
 // Importing ALL routes from auth-route.js
 import authRoutes from "./routes/auth-route.js";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
+app.use(cors({ origin: "http://localhost:5175", credentials: true }));
 app.use(express.json());
 // cookieParser can read data from the cookies
 app.use(cookieParser());
