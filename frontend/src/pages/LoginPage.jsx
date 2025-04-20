@@ -10,6 +10,7 @@ const LoginPage = () => {
   const { login, isLoading, error } = useAuthStore();
   const navigate = useNavigate();
 
+  // Even if password or email is incorrect it will still take me to homepage. Sort this after tutorial if it's not addressed
   const handleLogIn = async (e) => {
     e.preventDefault();
     await login(email, password);
