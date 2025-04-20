@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
 
 const SignUpPage = () => {
@@ -7,12 +7,14 @@ const SignUpPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { signup } = useAuthStore();
-  // const navigate = useNavigate();
+  const { signup, isLoading, error, user } = useAuthStore();
+  console.log(user);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await signup(email, password, name);
+    navigate("/verify-email");
   };
   return (
     <div className="flex-col  items-center justify-center bg-gray-100">
@@ -54,9 +56,9 @@ const SignUpPage = () => {
             required
           />
         </div>
-        {/* {error && <p className="text-red-500 text-sm">{error}</p>} */}
-        <button type="submit" className="w-90 bg-blue-600">
-          Sign Up
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+        <button type="submit" className="w-90 bg-blue-600" disabled={isLoading}>
+          {isLoading ? "Loading..." : "Sign Up"}
         </button>
       </form>
     </div>
