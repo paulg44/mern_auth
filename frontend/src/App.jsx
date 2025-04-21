@@ -5,7 +5,10 @@ import { VerificationEmailPage } from "./pages/VerificationEmailPage";
 import { useAuthStore } from "./store/authStore";
 import { useEffect } from "react";
 import DashboardPage from "./pages/DashboardPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
+// We are protecting whatever route is wrapped in this function so an un authenticated user cannot access it, as an example the dashboard
 const ProtectRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
   if (!isAuthenticated && !user) {
@@ -15,6 +18,7 @@ const ProtectRoute = ({ children }) => {
   return children;
 };
 
+// If a user is logged in, whatever component is wrapped in this provider means the user cant access it
 const AuthenticatedUserRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
   if (isAuthenticated && user) {
@@ -61,6 +65,23 @@ function App() {
           }
         />
         <Route path="/verify-email" element={<VerificationEmailPage />} />
+        <Route
+          path="/forgot-password"
+          element={
+            <AuthenticatedUserRoute>
+              <ForgotPasswordPage />
+            </AuthenticatedUserRoute>
+          }
+        />
+        <Route
+          path="/reset-password/:token"
+          element={
+            <AuthenticatedUserRoute>
+              <ResetPasswordPage />
+            </AuthenticatedUserRoute>
+          }
+        />
+
         <Route
           path="/dashboard"
           element={

@@ -11,6 +11,7 @@ export const useAuthStore = create((set) => ({
   error: null,
   isAuthenticated: false,
   isCheckingAuth: true,
+  message: null,
 
   //   The signup function as its self could easily be within the signup file... but this way it is better compartmentalised.
   signup: async (email, password, name) => {
@@ -109,6 +110,46 @@ export const useAuthStore = create((set) => ({
     } catch (error) {
       set({ isCheckingAuth: false, isAuthenticated: true, user: null });
       console.error(error);
+    }
+  },
+
+  forgotPassword: async (email) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await fetch(`${API_URL}/forgot-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ email }),
+      });
+      const data = await response.json();
+      console.log(data.message);
+      set({ isLoading: false, message: data.message });
+    } catch (error) {
+      set({ isLoading: false, error: error.message });
+      console.error(error);
+    }
+  },
+
+  resetPassword: async (token, password) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await fetch(`${API_URL}/reset-password/${token}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ password }),
+      });
+      const data = response.json();
+      set({ isLoading: false, message: data.message });
+    } catch (error) {
+      set({ isLoading: false, error: error.message });
+      console.error(error);
+      throw error;
     }
   },
 }));
