@@ -89,4 +89,26 @@ export const useAuthStore = create((set) => ({
       throw error;
     }
   },
+
+  checkAuth: async () => {
+    set({ isCheckingAuth: true, error: null });
+    try {
+      const response = await fetch(`${API_URL}/check-auth`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      const data = await response.json();
+      if (data.user) {
+        set({ isAuthenticated: true, user: data.user, isCheckingAuth: false });
+      } else {
+        set({ isAuthenticated: false, user: null, isCheckingAuth: false });
+      }
+    } catch (error) {
+      set({ isCheckingAuth: false, isAuthenticated: true, user: null });
+      console.error(error);
+    }
+  },
 }));
