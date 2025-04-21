@@ -26,7 +26,13 @@ export const useAuthStore = create((set) => ({
         body: JSON.stringify({ email, password, name }),
       });
       const data = await response.json();
-      set({ isLoading: false, isAuthenticated: true, user: data.user });
+      if (response.ok) {
+        set({ isLoading: false, isAuthenticated: true, user: data.user });
+        return true;
+      } else {
+        set({ isLoading: false, isAuthenticated: false, error: data.message });
+        return false;
+      }
     } catch (error) {
       set({ isLoading: false, error: error.message });
       console.error(error);

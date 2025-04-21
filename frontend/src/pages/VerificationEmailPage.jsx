@@ -1,4 +1,5 @@
 import { useState } from "react";
+// import { useNavigate } from "react-router-dom";
 import VerificationInput from "react-verification-input";
 import { useAuthStore } from "../store/authStore";
 
@@ -9,10 +10,12 @@ export const VerificationEmailPage = () => {
   );
   const { verifyEmail, isLoading, error } = useAuthStore();
 
+  // const navigate = useNavigate();
+
   const handleSubmit = async () => {
     await verifyEmail(value);
     if (!error && !isLoading) {
-      setVerifyMessage("Your email has been verified");
+      setVerifyMessage("Your email has been verified. Loading dashboard....");
     }
   };
 

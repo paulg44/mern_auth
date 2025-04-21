@@ -31,6 +31,7 @@ const AuthenticatedUserRoute = ({ children }) => {
 function App() {
   const { isCheckingAuth, checkAuth, logout, user } = useAuthStore();
 
+  // Checks user has the authentication
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
